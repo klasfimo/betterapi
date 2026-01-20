@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "betterapi",
+  "version": "${version}",
+  "name": "BetterApi",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/betterapi/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "org.clasize.betterapi.client.BetterapiDataGenerator"
+    ],
+    "client": [
+      "org.clasize.betterapi.client.BetterapiClient"
+    ],
+    "main": [
+      "org.clasize.betterapi.Betterapi"
+    ]
+  },
+  "mixins": [
+    "betterapi.mixins.json",
+    {
+      "config": "betterapi.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

@@ -1,0 +1,51 @@
+# Gradle files
+.gradle/
+build/
+out/
+bin/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Java
+*.class
+*.log
+*.ctxt
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Minecraft Modding
+run/
+run_client/
+run_server/
+run_game_test/
+logs/
+crash-reports/
+debug.log
+debug.log.gz
+latest.log
+
+# Mac & Windows
+.DS_Store
+Thumbs.db
+
+# Misc
+.env
+minecraft-clan-bot/
