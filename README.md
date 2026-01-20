@@ -19,6 +19,6 @@
 
 En güncel sürümü indirmek için aşağıdaki bağlantıyı kullanın:
 
-[**⬇️ En Son Sürümü İndir**](https://github.com/klasfimo/betterapi/releases/download/untagged-a2434b94a8599f25f06b/BetterApi-v02.22.jar)
+[**⬇️ En Son Sürümü İndir**](https://github.com/klasfimo/betterapi/releases/download/betterapi1.19.4.jar/BetterApi-v02.22.jar)
 
 > *Not: Bu proje hala geliştirilme aşamasındadır.*
