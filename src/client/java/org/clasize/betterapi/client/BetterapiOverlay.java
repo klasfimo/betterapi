@@ -3,13 +3,14 @@ package org.clasize.betterapi.client;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 public class BetterapiOverlay implements HudRenderCallback {
 
     @Override
-    public void onHudRender(DrawContext context, float tickDelta) {
+    public void onHudRender(MatrixStack matrices, float tickDelta) {
         if (NetworkManager.lastError == null) return;
         
         long timeSinceError = System.currentTimeMillis() - NetworkManager.lastErrorTime;
@@ -22,16 +23,15 @@ public class BetterapiOverlay implements HudRenderCallback {
 
         String errorText = "[BetterAPI] " + NetworkManager.lastError;
         int width = textRenderer.getWidth(errorText);
-        int infoWidth = textRenderer.getWidth("[BetterAPI] ");
         
         int x = client.getWindow().getScaledWidth() - width - 10;
         int y = 10;
 
         // Draw background (optional, but makes it readable)
-        context.fill(x - 2, y - 2, x + width + 2, y + 10, 0x80000000); // Semi-transparent black
+        DrawableHelper.fill(matrices, x - 2, y - 2, x + width + 2, y + 10, 0x80000000); // Semi-transparent black
 
         // Draw text
         // "BetterAPI" in Red, rest in White or Red
-        context.drawTextWithShadow(textRenderer, Text.of("§c[BetterAPI] §f" + NetworkManager.lastError), x, y, 0xFFFFFF);
+        textRenderer.drawWithShadow(matrices, Text.of("§c[BetterAPI] §f" + NetworkManager.lastError), x, y, 0xFFFFFF);
     }
 }

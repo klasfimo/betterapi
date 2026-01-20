@@ -6,26 +6,30 @@ import net.minecraft.client.network.PlayerListEntry;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.stream.Collectors;
 
 public class Tracker {
-    private static final String TARGET_SERVER = "play.mavibugday.com";
     private static int tickCounter = 0;
     private static final int INTERVAL = 100; // 5 seconds
 
     public static void onTick(MinecraftClient client) {
         if (client.player == null || client.getCurrentServerEntry() == null) return;
 
+        final String targetServer = ConfigManager.get().targetServer;
+        final String currentIp = client.getCurrentServerEntry().address;
+        if (targetServer != null && !targetServer.isEmpty()) {
+            final String normalizedTarget = targetServer.toLowerCase();
+            final String normalizedCurrent = currentIp.toLowerCase();
+            if (!normalizedCurrent.contains(normalizedTarget)) {
+                return; // different server, skip heartbeat entirely
+            }
+        }
+
         tickCounter++;
         if (tickCounter >= INTERVAL) {
             tickCounter = 0;
-            String currentIp = client.getCurrentServerEntry().address;
-            
-
-            
-            NetworkManager.sendHeartbeat(client.player.getName().getString(), currentIp);
+            if (NetworkManager.isHeartbeatReady()) {
+                NetworkManager.sendHeartbeat(client.player.getName().getString(), currentIp);
+            }
         }
     }
 

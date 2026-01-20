@@ -44,5 +44,6 @@ public class ConfigManager {
     public static class Config {
         public String apiUrl = "https://clan-bot-tu3y.onrender.com/api";
         public String apiKey = "CHANGE_ME";
+        public String targetServer = "play.mavibugday.com";
     }
 }

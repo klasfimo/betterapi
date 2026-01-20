@@ -16,6 +16,10 @@ public class NetworkManager {
             .connectTimeout(Duration.ofSeconds(10))
             .build();
     private static final Gson gson = new Gson();
+    private static final long HEARTBEAT_INTERVAL_MS = 5000;
+    private static long lastHeartbeatSent = 0;
+    private static long backoffUntil = 0;
+    private static int consecutiveErrors = 0;
 
     public static void registerUser(String username) {
         String url = ConfigManager.get().apiUrl + "/register";
@@ -52,13 +56,35 @@ public class NetworkManager {
     public static String lastError = null;
     public static long lastErrorTime = 0;
     public static long lastSuccessTime = 0;
+    public static boolean isHeartbeatReady() {
+        long now = System.currentTimeMillis();
+        if (now < backoffUntil) return false;
+        return (now - lastHeartbeatSent) >= HEARTBEAT_INTERVAL_MS;
+    }
+
+    private static void registerSuccess() {
+        consecutiveErrors = 0;
+        backoffUntil = 0;
+    }
+
+    private static void registerFailure() {
+        consecutiveErrors = Math.min(consecutiveErrors + 1, 6); // cap growth
+        long delay = (long) Math.min(60000, Math.pow(2, consecutiveErrors) * 1000L);
+        backoffUntil = System.currentTimeMillis() + delay;
+    }
 
     public static void sendHeartbeat(String username, String serverIp) {
+        if (!isHeartbeatReady()) {
+            return;
+        }
+
         // Auto-Register if API Key is missing or default
         if (ConfigManager.get().apiKey.equals("CHANGE_ME") || ConfigManager.get().apiKey.isEmpty()) {
             registerUser(username);
             return;
         }
+
+        lastHeartbeatSent = System.currentTimeMillis();
 
         String url = ConfigManager.get().apiUrl + "/heartbeat";
         JsonObject json = new JsonObject();
@@ -78,6 +104,7 @@ public class NetworkManager {
                         lastStatus = "§aBağlı (200 OK)";
                         lastSuccessTime = System.currentTimeMillis();
                         lastError = null; // Clear error on success
+                        registerSuccess();
 
                         JsonObject res = gson.fromJson(response.body(), JsonObject.class);
                         if (res.has("scanRequested") && res.get("scanRequested").getAsBoolean()) {
@@ -97,6 +124,7 @@ public class NetworkManager {
                         lastError = "API Hatası: " + response.statusCode();
                         lastErrorTime = System.currentTimeMillis();
                         System.err.println("BetterAPI Auth Failed. Key might be invalid.");
+                        registerFailure();
                     }
                 })
                 .exceptionally(e -> {
@@ -104,6 +132,7 @@ public class NetworkManager {
                     lastError = "Bağlantı Hatası: " + e.getMessage();
                     lastErrorTime = System.currentTimeMillis();
                     System.err.println("BetterAPI Heartbeat Failed: " + e.getMessage());
+                    registerFailure();
                     return null;
                 });
     }
