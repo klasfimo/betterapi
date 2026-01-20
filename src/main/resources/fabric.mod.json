@@ -3,8 +3,10 @@
   "id": "betterapi",
   "version": "${version}",
   "name": "BetterApi",
-  "description": "",
-  "authors": [],
+  "description": "Minecraft API entegrasyon modu.",
+  "authors": [
+    "klasfimo"
+  ],
   "contact": {},
   "license": "All-Rights-Reserved",
   "icon": "assets/betterapi/icon.png",

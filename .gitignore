@@ -24,6 +24,7 @@ bin/
 *.log
 *.ctxt
 *.jar
+!gradle/wrapper/gradle-wrapper.jar
 *.war
 *.nar
 *.ear

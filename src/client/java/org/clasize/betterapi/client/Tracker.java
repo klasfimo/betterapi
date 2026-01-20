@@ -23,8 +23,7 @@ public class Tracker {
             tickCounter = 0;
             String currentIp = client.getCurrentServerEntry().address;
             
-            // Debug message in chat
-            client.player.sendMessage(net.minecraft.text.Text.of("§a[BetterAPI] §7Heartbeat gönderiliyor... IP: " + currentIp), false);
+
             
             NetworkManager.sendHeartbeat(client.player.getName().getString(), currentIp);
         }
