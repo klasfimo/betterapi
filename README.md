@@ -1,4 +1,4 @@
-# BetterAPI
+# BetterAPI 1.19.4
 
 **BetterAPI**, klan üyelerinin durumunu takip etmek ve oyun içi verileri Discord ile senkronize etmek için geliştirilmiş bir Minecraft Fabric modudur.
 
